@@ -7,16 +7,13 @@ Authors: Joel Burton, Christian Fernandez, Meggie Mahnken.
 """
 
 
-from flask import Flask, render_template, redirect, flash
+from flask import Flask, render_template, redirect, flash, session
 import jinja2
 
 import model
 
 
 app = Flask(__name__)
-
-# Need to use Flask sessioning features
-
 app.secret_key = 'this-should-be-something-unguessable'
 
 # Normally, if you refer to an undefined variable in a Jinja template,
@@ -59,7 +56,7 @@ def show_melon(id):
 @app.route("/cart")
 def shopping_cart():
     """Display content of shopping cart."""
-
+    
     # TODO: Display the contents of the shopping cart.
     #   - The cart is a list in session containing melons added
 
@@ -73,6 +70,13 @@ def add_to_cart(id):
     When a melon is added to the cart, redirect browser to the shopping cart
     page and display a confirmation message: 'Successfully added to cart'.
     """
+    # cart = request.form[""]
+    # if "cart" in session:
+    #     pass # what do I do if the cart is in session? nothing?
+    # elif "cart" not in session:
+    #     #add cart to session
+
+
 
     # TODO: Finish shopping cart functionality
     #   - use session variables to hold cart list

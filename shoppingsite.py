@@ -14,7 +14,7 @@ import model
 
 
 app = Flask(__name__)
-app.secret_key = 'this-should-be-something-unguessable'
+app.secret_key = 'arimish'
 
 # Normally, if you refer to an undefined variable in a Jinja template,
 # Jinja silently ignores this. This makes debugging difficult, so we'll
@@ -57,10 +57,33 @@ def show_melon(id):
 def shopping_cart():
     """Display content of shopping cart."""
     
+    # cart = {}
+    # total_melons = 0
+    #MELON_QUERY = "SELECT common_name, price FROM melons WHERE id = ?"
+
+    cart_dict = {}
+
+    
+    if "cart" in session:
+        melon_ids = session["cart"]
+        for id in melon_ids:
+            melon = model.Melon.get_by_id(id)
+            cart_dict[id] = cart_dict.get(id, 0) + 1
+    
+
+    # print cart_dict
+    # print melon.common_name, melon.price, cart_dict[melon.id]
+
+    # print dir(melon) I did this because it will show me all the things I can do to melon 
+
     # TODO: Display the contents of the shopping cart.
     #   - The cart is a list in session containing melons added
 
-    return render_template("cart.html")
+    return render_template("cart.html", 
+                            common_name = melon.common_name,
+                            price = melon.price,
+                            num_melons = cart_dict[melon.id],
+                            total_price = melon.price * cart_dict[melon.id])
 
 
 @app.route("/add_to_cart/<int:id>")
@@ -70,18 +93,15 @@ def add_to_cart(id):
     When a melon is added to the cart, redirect browser to the shopping cart
     page and display a confirmation message: 'Successfully added to cart'.
     """
-    # cart = request.form[""]
-    # if "cart" in session:
-    #     pass # what do I do if the cart is in session? nothing?
-    # elif "cart" not in session:
-    #     #add cart to session
-
-
-
+    
     # TODO: Finish shopping cart functionality
     #   - use session variables to hold cart list
+    
+    session.setdefault('cart', [])
+    session['cart'].append(id)   
+    flash("Successfully added to cart!")
 
-    return "Oops! This needs to be implemented!"
+    return redirect("/cart")
 
 
 @app.route("/login", methods=["GET"])
